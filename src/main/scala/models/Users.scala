@@ -7,5 +7,6 @@ case class Users(
     userName: String,
     age: Int,
     address: String,
-    dateOfBirth: String
+    dateOfBirth: String,
+    userType: UserType
   )
