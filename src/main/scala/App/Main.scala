@@ -14,13 +14,13 @@ object Main extends App {
   private val userRepo = new UserRepo(userDB)
 
   private val user1 = Users(UUID.randomUUID(), "jks", 23, "gkp", "12/2/1998", Customer)
-  userRepo.addUser(user1)
+  println(userRepo.addUser(user1))
 
   private val user2 = Users(UUID.randomUUID(), "Jeet", 24, "Delhi", "12/2/1998", Customer)
-  userRepo.addUser(user2)
+  println(userRepo.addUser(user2))
 
   private val user3 = Users(UUID.randomUUID(), "Ajit", 24, "Noida", "12/2/1998", Admin)
-  userRepo.addUser(user3)
+  println(userRepo.addUser(user3))
 
   private val listOfUser = userRepo.getAll
   println("-------- All users ---------")

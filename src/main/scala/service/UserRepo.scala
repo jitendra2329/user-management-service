@@ -1,13 +1,15 @@
 package service
 
+import Dao.DAO
 import db.UserDB
 import models.Users
+
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
 class UserRepo(userDB: UserDB) {
 
-  def addUser(user: Users): Boolean = userDB.addUser(user)
+  def addUser(user: Users): String = userDB.addUser(user)
 
   def getById(userId: UUID): Option[Users] = userDB.getById(userId)
 
