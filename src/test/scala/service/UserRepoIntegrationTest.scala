@@ -15,7 +15,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
   val customerUserId: UUID = UUID.randomUUID()
   val adminUserId: UUID = UUID.randomUUID()
 
-  it should "return 'new user added.'" in {
+  "addUser" should "return 'new user added.'" in {
     val user = Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer)
     val actualResult = userRepo.addUser(user)
     val expectedResult = "new user added."

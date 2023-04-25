@@ -12,7 +12,7 @@ class UserDBUnitTest extends AnyFlatSpec {
   val customerUserId: UUID = UUID.randomUUID()
   val adminUserId: UUID = UUID.randomUUID()
 
-  it should "Add user should return new user added." in {
+  "addUser" should "Add user should return new user added." in {
     val user = Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer)
     assert(userDB.addUser(user) == "new user added.")
   }
