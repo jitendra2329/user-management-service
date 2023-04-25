@@ -1,13 +1,12 @@
 package service
 
 import Dao.DAO
-import db.UserDB
 import models.Users
 
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
-class UserRepo(userDB: UserDB) {
+class UserRepo(userDB: DAO) {
 
   def addUser(user: Users): String = userDB.addUser(user)
 
