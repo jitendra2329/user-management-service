@@ -1,5 +1,6 @@
 package App
 
+import Dao.DAO
 import db.UserDB
 import models.UserType.{Admin, Customer}
 import service.UserRepo
@@ -40,6 +41,11 @@ object Main extends App {
 
   println("-------- All Users Deleted ---------------")
   println(userRepo.getAll)
+
+
+
+
+
 }
 
 
