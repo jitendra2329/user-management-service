@@ -1,13 +1,11 @@
 package service
 
-import Dao.DAO
 import db.UserDB
 import models.UserType.{Admin, Customer}
 import models.Users
 import org.mockito.Mockito.when
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
-
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
