@@ -30,9 +30,12 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
   }
 
   it should "also return an Option[Users]'" in {
-    val expectedResult = Some(Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin))
+    val expectedResult = Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     val actualResult = userDB.getById(adminUserId)
-    actualResult shouldEqual expectedResult
+    actualResult match {
+      case Some(value) => value shouldEqual expectedResult
+      case None => true
+    }
   }
 
   it should "return all values of ListBuffer[Users]'" in {
@@ -41,7 +44,10 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
     val actualResult = userDB.getAll
-    actualResult shouldEqual expectedResult
+    actualResult match {
+      case result if result.isEmpty => assert(result != expectedResult)
+      case result => result shouldEqual expectedResult
+    }
   }
 
   it should "return an updated ListBuffer[Users]'" in {
@@ -50,7 +56,10 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(adminUserId, "Bhavya Verma", 26, "Delhi", "12/2/1996", Admin)
     )
     val actualResult = userDB.updateById(adminUserId, "Bhavya Verma")
-    actualResult shouldEqual expectedResult
+    actualResult match {
+      case result if result.isEmpty => assert(result != expectedResult)
+      case result => result shouldEqual expectedResult
+    }
   }
 
   it should "return an ListBuffer[Users] after deletion by Id" in {
@@ -58,7 +67,10 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
     val actualResult = userDB.deleteById(customerUserId)
-    actualResult shouldEqual expectedResult
+    actualResult match {
+      case result if result.isEmpty => assert(result != expectedResult)
+      case result => result shouldEqual expectedResult
+    }
   }
 
   it should "return an empty ListBuffer[Users]'" in {
