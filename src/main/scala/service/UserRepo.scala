@@ -2,7 +2,6 @@ package service
 
 import Dao.DAO
 import models.Users
-
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
