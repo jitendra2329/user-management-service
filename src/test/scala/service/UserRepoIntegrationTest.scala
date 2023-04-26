@@ -31,7 +31,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
 
   it should "also return an Option[Users]'" in {
     val expectedResult = Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
-    val actualResult = userDB.getById(adminUserId)
+    val actualResult = userRepo.getById(adminUserId)
     actualResult match {
       case Some(value) => value shouldEqual expectedResult
       case None => true
@@ -43,7 +43,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.getAll
+    val actualResult = userRepo.getAll
     actualResult match {
       case result if result.isEmpty => assert(result != expectedResult)
       case result => result shouldEqual expectedResult
@@ -55,7 +55,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya Verma", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.updateById(adminUserId, "Bhavya Verma")
+    val actualResult = userRepo.updateById(adminUserId, "Bhavya Verma")
     actualResult match {
       case result if result.isEmpty => assert(result != expectedResult)
       case result => result shouldEqual expectedResult
@@ -66,7 +66,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
     val expectedResult = ListBuffer(
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.deleteById(customerUserId)
+    val actualResult = userRepo.deleteById(customerUserId)
     actualResult match {
       case result if result.isEmpty => assert(result != expectedResult)
       case result => result shouldEqual expectedResult
@@ -75,7 +75,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
 
   it should "return an empty ListBuffer[Users]'" in {
     val expectedResult = "All Deleted!"
-    val actualResult = userDB.deleteAll()
+    val actualResult = userRepo.deleteAll()
     actualResult shouldEqual expectedResult
   }
 }

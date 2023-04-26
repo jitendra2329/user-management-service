@@ -40,5 +40,3 @@ object Main extends App {
   println("-------- All Users Deleted ---------------")
   println(userRepo.getAll)
 }
-
-
