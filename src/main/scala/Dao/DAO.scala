@@ -3,14 +3,13 @@ package Dao
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 import models.Users
-
 import scala.concurrent.Future
 
 trait DAO {
 
   def addUser(user: Users): Future[String]
 
-  def getById(userId: UUID): Future[Option[Users]]
+  def getById(userId: UUID): Future[ListBuffer[Users]]
 
   def getAll: Future[ListBuffer[Users]]
 

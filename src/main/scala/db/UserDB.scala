@@ -2,7 +2,6 @@ package db
 
 import Dao.DAO
 import models.Users
-
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,14 +13,17 @@ class UserDB extends DAO {
 
   def addUser(user: Users): Future[String] = Future {
     userStorage += user
+    Thread.sleep(150)
     "new user added."
   }
 
-  def getById(userId: UUID): Future[Option[Users]] = Future {
-    userStorage.find(_.userId == userId)
+  def getById(userId: UUID): Future[ListBuffer[Users]] = Future {
+    Thread.sleep(150)
+    userStorage.filter(_.userId == userId)
   }
 
   def getAll: Future[ListBuffer[Users]] = Future {
+    Thread.sleep(150)
     userStorage
   }
 
@@ -34,11 +36,13 @@ class UserDB extends DAO {
 
   def deleteById(userID: UUID): Future[ListBuffer[Users]] = Future {
     userStorage = userStorage.filterNot(_.userId == userID)
+    Thread.sleep(150)
     userStorage
   }
 
   def deleteAll(): Future[String] = Future {
-    userStorage = ListBuffer.empty
+    userStorage.clear()
+    Thread.sleep(150)
     "All Deleted!"
   }
 }

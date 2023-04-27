@@ -2,35 +2,33 @@ package service
 
 import Dao.DAO
 import models.Users
-
 import java.util.UUID
-import scala.concurrent.Await
+import scala.concurrent.Future
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.duration.DurationInt
 
 class UserRepo(userDB: DAO) {
 
-  def addUser(user: Users): String = {
-    Await.result(userDB.addUser(user), 2.second)
+  def addUser(user: Users): Future[String] = {
+    userDB.addUser(user)
   }
 
-  def getById(userId: UUID): Option[Users] = {
-    Await.result(userDB.getById(userId), 1.second)
+  def getById(userId: UUID): Future[ListBuffer[Users]] = {
+    userDB.getById(userId)
   }
 
-  def getAll: ListBuffer[Users] = {
-    Await.result(userDB.getAll, 1.second)
+  def getAll: Future[ListBuffer[Users]] = {
+    userDB.getAll
   }
 
-  def updateById(userId: UUID, valueToUpdate: String): ListBuffer[Users] = {
-    Await.result(userDB.updateById(userId, valueToUpdate), 1.second)
+  def updateById(userId: UUID, valueToUpdate: String): Future[ListBuffer[Users]] = {
+    userDB.updateById(userId, valueToUpdate)
   }
 
-  def deleteById(userID: UUID): ListBuffer[Users] = {
-    Await.result(userDB.deleteById(userID), 1.second)
+  def deleteById(userID: UUID): Future[ListBuffer[Users]] = {
+    userDB.deleteById(userID)
   }
 
-  def deleteAll(): String = {
-    Await.result(userDB.deleteAll(), 1.second)
+  def deleteAll(): Future[String] = {
+    userDB.deleteAll()
   }
 }

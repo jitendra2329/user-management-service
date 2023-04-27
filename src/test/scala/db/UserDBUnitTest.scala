@@ -16,25 +16,25 @@ class UserDBUnitTest extends AnyFlatSpec {
 
   "addUser" should "Add user should return new user added." in {
     val user = Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer)
-    userDB.addUser(user).onComplete {
+    userDB.addUser(user).andThen {
       case Success(value) => assert(value == "new user added.")
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 
   it should "Add user and should return new user added." in {
     val user = Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
-    userDB.addUser(user).onComplete {
+    userDB.addUser(user).andThen {
       case Success(value) => assert(value == "new user added.")
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 
   it should "Get user by ID should return an Option[Users]" in {
-    val user = Some(Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin))
-    userDB.getById(adminUserId).onComplete {
-      case Success(value) => assert(value == user)
-      case Failure(_) => "Error"
+    val user = Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
+    userDB.getById(adminUserId).andThen {
+      case Success(value) => assert(value == ListBuffer(user))
+      case Failure(_) => false
     }
   }
 
@@ -43,9 +43,9 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
     )
-    userDB.getAll.onComplete {
+    userDB.getAll.andThen {
       case Success(value) => assert(value == users)
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 
@@ -55,9 +55,9 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(adminUserId, "Bhavya Verma", 24, "Delhi", "12/2/1998", Admin)
     )
     val newName = "Bhavya Verma"
-    userDB.updateById(adminUserId, newName).onComplete {
+    userDB.updateById(adminUserId, newName).andThen {
       case Success(value) => assert(value == users)
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 
@@ -66,16 +66,16 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
     )
-    userDB.deleteById(customerUserId).onComplete {
+    userDB.deleteById(customerUserId).andThen {
       case Success(value) => assert(value == users.filterNot(_.userId == customerUserId))
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 
   it should "Delete all users should return 'All Deleted!'" in {
-    userDB.deleteAll().onComplete {
+    userDB.deleteAll().andThen {
       case Success(value) => assert(value == "All Deleted!")
-      case Failure(_) => "Error"
+      case Failure(_) => false
     }
   }
 }

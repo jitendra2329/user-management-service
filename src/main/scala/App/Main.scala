@@ -4,7 +4,10 @@ import db.UserDB
 import models.UserType.{Admin, Customer}
 import service.UserRepo
 import models.Users
+import scala.util.{Success,Failure}
+
 import java.util.UUID
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main extends App {
 
@@ -13,30 +16,55 @@ object Main extends App {
   private val userRepo = new UserRepo(userDB)
 
   private val user1 = Users(UUID.randomUUID(), "jks", 23, "gkp", "12/2/1998", Customer)
-  println(userRepo.addUser(user1))
+  userRepo.addUser(user1).onComplete{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
   private val user2 = Users(UUID.randomUUID(), "Jeet", 24, "Delhi", "12/2/1998", Customer)
-  println(userRepo.addUser(user2))
+  userRepo.addUser(user2).onComplete {
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
   private val user3 = Users(UUID.randomUUID(), "Ajit", 24, "Noida", "12/2/1998", Admin)
-  println(userRepo.addUser(user3))
+  userRepo.addUser(user3).onComplete {
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
   private val listOfUser = userRepo.getAll
-  println("-------- All users ---------")
-  listOfUser.foreach(println)
+  listOfUser.onComplete{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
-  println("\n------- User by Id ----------")
-  println(userRepo.getById(user2.userId))
+  val result = userRepo.getById(user2.userId)
+  result.onComplete{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
   private val listAfterUpdation = userRepo.updateById(user3.userId, "Ajit Kumar")
-  println("\n------- Users after updation --------")
-  listAfterUpdation.foreach(println)
+  listAfterUpdation.andThen {
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
-  println("\n-------- Users after deletion by Id -----------")
-  println(userRepo.deleteById(user1.userId))
+  userRepo.deleteById(user1.userId).andThen{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
-  println("\n" + userRepo.deleteAll())
+  userRepo.deleteAll().onComplete{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
 
-  println("-------- All Users Deleted ---------------")
-  println(userRepo.getAll)
+  userRepo.getAll.onComplete{
+    case Success(value) => println(value)
+    case Failure(exception) => println(exception.getMessage)
+  }
+
+  Thread.sleep(2000)
 }
