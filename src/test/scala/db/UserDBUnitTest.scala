@@ -33,7 +33,7 @@ class UserDBUnitTest extends AnyFlatSpec {
   it should "Get user by ID should return an Option[Users]" in {
     val user = Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
     userDB.getById(adminUserId).andThen {
-      case Success(value) => assert(value == ListBuffer(user))
+      case Success(value) => assert(value.contains(user))
       case Failure(_) => false
     }
   }

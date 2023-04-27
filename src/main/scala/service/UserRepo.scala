@@ -12,7 +12,7 @@ class UserRepo(userDB: DAO) {
     userDB.addUser(user)
   }
 
-  def getById(userId: UUID): Future[ListBuffer[Users]] = {
+  def getById(userId: UUID): Future[Option[Users]] = {
     userDB.getById(userId)
   }
 

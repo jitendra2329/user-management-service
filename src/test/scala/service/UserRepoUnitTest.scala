@@ -38,9 +38,9 @@ class UserRepoUnitTest extends AnyFunSuite with MockitoSugar {
   test("Get user by ID should return an Option[Users]") {
     val userId = UUID.randomUUID()
     val user = Users(UUID.randomUUID(), "Bhavya", 24, "Delhi", "12/2/1998", Admin)
-    when(userDB.getById(userId)).thenReturn(Future(ListBuffer(user)))
+    when(userDB.getById(userId)).thenReturn(Future(Some(user)))
     userRepo.getById(userId).onComplete {
-      case Success(value) => assert(value == ListBuffer(user))
+      case Success(value) => assert(value.contains(user))
       case Failure(_) => false
     }
   }

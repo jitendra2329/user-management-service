@@ -39,7 +39,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
     val expectedResult = Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     val actualResult = userRepo.getById(adminUserId)
     actualResult.onComplete {
-      case Success(value) => assert(value == ListBuffer(expectedResult))
+      case Success(value) => assert(value.contains(expectedResult))
       case Failure(_) => false
     }
   }

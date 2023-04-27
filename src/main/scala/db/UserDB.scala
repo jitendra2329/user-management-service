@@ -17,9 +17,9 @@ class UserDB extends DAO {
     "new user added."
   }
 
-  def getById(userId: UUID): Future[ListBuffer[Users]] = Future {
+  def getById(userId: UUID): Future[Option[Users]] = Future {
     Thread.sleep(150)
-    userStorage.filter(_.userId == userId)
+    userStorage.find(_.userId == userId)
   }
 
   def getAll: Future[ListBuffer[Users]] = Future {
