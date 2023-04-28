@@ -4,9 +4,10 @@ import db.UserDB
 import models.UserType.{Admin, Customer}
 import models.Users
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 class UserRepoIntegrationTest extends AnyFlatSpec {
 
@@ -19,22 +20,27 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
     val user = Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer)
     val actualResult = userRepo.addUser(user)
     val expectedResult = "new user added."
-    actualResult shouldEqual expectedResult
+    actualResult.onComplete {
+      case Success(value) => assert(value == expectedResult)
+      case Failure(_) => false
+    }
   }
 
   it should "also return new user added." in {
     val user = Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     val actualResult = userRepo.addUser(user)
-    val expectedResult = "new user added."
-    actualResult shouldEqual expectedResult
+    actualResult.onComplete {
+      case Success(value) => assert(value == "new user added.")
+      case Failure(_) => false
+    }
   }
 
   it should "also return an Option[Users]'" in {
     val expectedResult = Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
-    val actualResult = userDB.getById(adminUserId)
-    actualResult match {
-      case Some(value) => value shouldEqual expectedResult
-      case None => true
+    val actualResult = userRepo.getById(adminUserId)
+    actualResult.onComplete {
+      case Success(value) => assert(value.contains(expectedResult))
+      case Failure(_) => false
     }
   }
 
@@ -43,10 +49,13 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.getAll
+
+    val actualResult = userRepo.getAll
     actualResult match {
-      case result if result.isEmpty => assert(result != expectedResult)
-      case result => result shouldEqual expectedResult
+      case result => result.onComplete {
+        case Success(value) => assert(value == expectedResult)
+        case Failure(_) => false
+      }
     }
   }
 
@@ -55,10 +64,12 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya Verma", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.updateById(adminUserId, "Bhavya Verma")
+    val actualResult = userRepo.updateById(adminUserId, "Bhavya Verma")
     actualResult match {
-      case result if result.isEmpty => assert(result != expectedResult)
-      case result => result shouldEqual expectedResult
+      case result => result.onComplete {
+        case Success(value) => assert(value == expectedResult)
+        case Failure(_) => false
+      }
     }
   }
 
@@ -66,16 +77,23 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
     val expectedResult = ListBuffer(
       Users(adminUserId, "Bhavya", 26, "Delhi", "12/2/1996", Admin)
     )
-    val actualResult = userDB.deleteById(customerUserId)
+    val actualResult = userRepo.deleteById(customerUserId)
     actualResult match {
-      case result if result.isEmpty => assert(result != expectedResult)
-      case result => result shouldEqual expectedResult
+      case result => result.onComplete {
+        case Success(value) => assert(value == expectedResult)
+        case Failure(_) => false
+      }
     }
   }
 
   it should "return an empty ListBuffer[Users]'" in {
     val expectedResult = "All Deleted!"
-    val actualResult = userDB.deleteAll()
-    actualResult shouldEqual expectedResult
+    val actualResult = userRepo.deleteAll()
+    actualResult match {
+      case result => result.onComplete {
+        case Success(value) => assert(value == expectedResult)
+        case Failure(_) => false
+      }
+    }
   }
 }

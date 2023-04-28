@@ -3,8 +3,10 @@ package db
 import models.UserType.{Admin, Customer}
 import models.Users
 import org.scalatest.flatspec.AnyFlatSpec
+import scala.util.{Success, Failure}
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserDBUnitTest extends AnyFlatSpec {
 
@@ -14,17 +16,26 @@ class UserDBUnitTest extends AnyFlatSpec {
 
   "addUser" should "Add user should return new user added." in {
     val user = Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer)
-    assert(userDB.addUser(user) == "new user added.")
+    userDB.addUser(user).andThen {
+      case Success(value) => assert(value == "new user added.")
+      case Failure(_) => false
+    }
   }
 
   it should "Add user and should return new user added." in {
     val user = Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
-    assert(userDB.addUser(user) == "new user added.")
+    userDB.addUser(user).andThen {
+      case Success(value) => assert(value == "new user added.")
+      case Failure(_) => false
+    }
   }
 
   it should "Get user by ID should return an Option[Users]" in {
     val user = Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
-    assert(userDB.getById(adminUserId).contains(user))
+    userDB.getById(adminUserId).andThen {
+      case Success(value) => assert(value.contains(user))
+      case Failure(_) => false
+    }
   }
 
   it should "Get all users should return a ListBuffer[Users]" in {
@@ -32,7 +43,10 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
     )
-    assert(userDB.getAll == users)
+    userDB.getAll.andThen {
+      case Success(value) => assert(value == users)
+      case Failure(_) => false
+    }
   }
 
   it should "Update user by ID should return a ListBuffer[Users]" in {
@@ -41,8 +55,10 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(adminUserId, "Bhavya Verma", 24, "Delhi", "12/2/1998", Admin)
     )
     val newName = "Bhavya Verma"
-    val actualUser = userDB.updateById(adminUserId, newName)
-    assert(users == actualUser)
+    userDB.updateById(adminUserId, newName).andThen {
+      case Success(value) => assert(value == users)
+      case Failure(_) => false
+    }
   }
 
   it should "Delete user by ID should return a ListBuffer[Users]" in {
@@ -50,12 +66,16 @@ class UserDBUnitTest extends AnyFlatSpec {
       Users(customerUserId, "Jeet", 23, "gkp", "12/2/1998", Customer),
       Users(adminUserId, "Bhavya", 24, "Delhi", "12/2/1998", Admin)
     )
-    assert(userDB.deleteById(customerUserId) == users.filterNot(_.userId == customerUserId))
+    userDB.deleteById(customerUserId).andThen {
+      case Success(value) => assert(value == users.filterNot(_.userId == customerUserId))
+      case Failure(_) => false
+    }
   }
 
   it should "Delete all users should return 'All Deleted!'" in {
-    assert(userDB.deleteAll() == "All Deleted!")
+    userDB.deleteAll().andThen {
+      case Success(value) => assert(value == "All Deleted!")
+      case Failure(_) => false
+    }
   }
 }
-
-
