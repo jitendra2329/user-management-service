@@ -1,21 +1,21 @@
 package Dao
 
-import java.util.UUID
-import scala.collection.mutable.ListBuffer
 import models.Users
+
+import java.sql.ResultSet
 import scala.concurrent.Future
 
 trait DAO {
 
   def addUser(user: Users): Future[String]
 
-  def getById(userId: UUID): Future[Option[Users]]
+  def getById(userId: Int): Future[ResultSet]
 
-  def getAll: Future[ListBuffer[Users]]
+  def getAll: Future[ResultSet]
 
-  def updateById(userId: UUID, valueToUpdate: String): Future[ListBuffer[Users]]
+  def updateById(userId: Int, valueToUpdate: String): Future[String]
 
-  def deleteById(userID: UUID): Future[ListBuffer[Users]]
+  def deleteById(userID: Int): Future[String]
 
   def deleteAll(): Future[String]
 }
