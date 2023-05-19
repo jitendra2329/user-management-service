@@ -5,8 +5,7 @@ import models.UserType.{Admin, Customer}
 import models.{UserType, Users}
 import service.UserRepo
 
-import java.sql.ResultSet
-import scala.annotation.tailrec
+import java.util.InputMismatchException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.StdIn
 import scala.util.{Failure, Success, Try}
@@ -38,7 +37,10 @@ object Main extends App {
     println("Enter name :")
     val name = StdIn.readLine()
     println("Enter age :")
-    val age = StdIn.readInt()
+    val age: Either[String, Int] = Try(StdIn.readInt()) match {
+      case Success(value) => Right(value)
+      case Failure(_) => Left("")
+    }
     println("Enter address :")
     val address = StdIn.readLine()
     println("Enter a date (YYYY-MM-DD): ")
@@ -49,19 +51,19 @@ object Main extends App {
     val typeOfUser: Either[Unit, UserType] = userType match {
       case "Admin" => Right(Admin)
       case "Customer" => Right(Customer)
-      case _ => Left("Invalid user")
+      case "admin" => Right(Admin)
+      case "customer" => Right(Customer)
+      case _ => Left("")
     }
 
-
-    val user = Try(Users(name, age, address, dob, typeOfUser.getOrElse(throw new RuntimeException)))
+    val user = Try(Users(name, age.getOrElse(throw new InputMismatchException), address, dob, typeOfUser.getOrElse(throw new RuntimeException)))
     user match {
       case Success(value) => userRepo.addUser(value).onComplete {
         case Success(value) => println(value)
         case Failure(exception) => println(exception.getMessage)
       }
-      case Failure(_) => println("Invalid user type!!")
+      case Failure(_) => println("Invalid entry!!")
     }
-
   }
 
   private def getUserDetailById(): Unit = {
@@ -71,26 +73,11 @@ object Main extends App {
       case Success(resultSet) => display(resultSet)
       case Failure(exception) => println(exception.getMessage)
     }
-
-    //    @tailrec
-
   }
 
-  @tailrec
-  def display(resultSet: ResultSet): Unit = {
-    if (resultSet.next()) {
-      val id = resultSet.getInt("userId")
-      val name = resultSet.getString("userName")
-      val age = resultSet.getInt("age")
-      val address = resultSet.getString("address")
-      val dob = resultSet.getDate("dateOfBirth")
-      val userType = resultSet.getString("userType")
-
-      println(s"Id: $id,  Name: $name, age: $age, address: $address, dob: $dob, userType: $userType")
-    }
-    display(resultSet)
+  def display(resultSet: List[Any]): Unit = {
+    resultSet.foreach(println)
   }
-
 
   private def getAllUsers(): Unit = {
     val listOfUser = userRepo.getAll

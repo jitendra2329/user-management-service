@@ -5,6 +5,8 @@ import models.Users
 
 import scala.util.{Failure, Success, Try}
 import java.sql.{ResultSet, SQLException, Statement}
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -14,29 +16,38 @@ class UserDB extends DAO {
 
   def addUser(user: Users): Future[String] = Future {
     val query = s"INSERT INTO userTable (userName, age, address, dateOfBirth, userType) VALUES ('${user.userName}', ${user.age}, '${user.address}', '${user.dateOfBirth}', '${user.userType}') ;"
-
-    Try(statement.executeQuery(query)) match {
-      case Success(_) => "Data inserted successfully!"
-      case Failure(exception) => exception.getMessage
-    }
+    Try(statement.executeQuery(query))
+      "Data inserted successfully!"
   }
 
-  def getById(userId: Int): Future[ResultSet] = Future {
+  def getById(userId: Int): Future[List[Any]] = Future {
     Thread.sleep(150)
     val query = s"SELECT  * FROM userTable WHERE userId = $userId ;"
+    queryExecution(query)
+  }
+
+  def getAll: Future[List[Any]] = Future {
+    val query = "SELECT * FROM userTable ORDER BY userId ASC;"
+    Thread.sleep(150)
+    queryExecution(query)
+  }
+
+  private def queryExecution(query: String): List[Any] = {
     Try(statement.executeQuery(query)) match {
-      case Success(resultSet) => resultSet
+      case Success(resultSet) => resultSetToList(resultSet)
       case Failure(_) => throw new SQLException
     }
   }
 
-  def getAll: Future[ResultSet] = Future {
-    val query = "SELECT * FROM userTable;"
-    Thread.sleep(150)
-    Try(statement.executeQuery(query)) match {
-      case Success(resultSet) => resultSet
-      case Failure(_) => throw new SQLException
-    }
+  private val listBuffer = ListBuffer[List[Any]]()
+
+  @tailrec
+  private def resultSetToList(resultSet: ResultSet): List[List[Any]] = {
+    if (resultSet.next()) {
+      val row = (1 to resultSet.getMetaData.getColumnCount).map(resultSet.getObject).toList
+      listBuffer += row
+      resultSetToList(resultSet)
+    } else listBuffer.toList
   }
 
   def updateById(userId: Int, valueToUpdate: String): Future[String] = Future {
@@ -48,7 +59,7 @@ class UserDB extends DAO {
   def deleteById(userID: Int): Future[String] = Future {
     val query = s"DELETE FROM userTable WHERE userId = $userID;"
     Try(statement.executeQuery(query)) match {
-      case Success(resultSet) => ""
+      case Success(_) => "User Deleted!"
       case Failure(_) => throw new SQLException
     }
   }
@@ -56,7 +67,7 @@ class UserDB extends DAO {
   def deleteAll(): Future[String] = Future {
     val query = "TRUNCATE userTable;"
     Try(statement.executeQuery(query)) match {
-      case Success(_) => "All Deleted!"
+      case Success(_) => "All users deleted!"
       case Failure(_) => throw new SQLException
     }
   }

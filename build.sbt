@@ -16,3 +16,4 @@ libraryDependencies += "org.scalatestplus" %% "mockito-4-6" % "3.2.15.0" % "test
 libraryDependencies += "org.scalatest" %% "scalatest-wordspec" % "3.3.0-SNAP3" % Test
 
 libraryDependencies += "org.postgresql" % "postgresql" % "42.5.4"
+libraryDependencies += "com.typesafe" % "config" % "1.4.2"

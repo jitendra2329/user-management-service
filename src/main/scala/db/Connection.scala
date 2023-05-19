@@ -1,13 +1,16 @@
 package db
 
+
 import java.sql.{Connection, DriverManager, SQLException}
 import scala.util.{Failure, Success, Try}
+import com.typesafe.config.ConfigFactory
 
 object Connection {
+  private val config = ConfigFactory.load("postgres.conf")
 
-  private val url = "jdbc:postgresql://localhost:5432/users"
-  private val username = "jitendra"
-  private val password = "123456789"
+  private val url = config.getString("postgres.url")
+  private val username = config.getString("postgres.username")
+  private val password = config.getString("postgres.password")
 
   def connection(): Connection = {
     Try(DriverManager.getConnection(url, username, password)) match {
