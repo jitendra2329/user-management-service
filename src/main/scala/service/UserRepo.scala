@@ -15,14 +15,14 @@ class UserRepo(userDB: DAO) {
     "Data inserted successfully!"
   }
 
-  def getById(userId: Int): Future[List[Any]] = {
+  def getById(userId: Int):   Future[List[Users]] = {
     Try(userDB.getById(userId)) match {
       case Success(resultSet) => resultSet
       case Failure(_) => throw new SQLException
     }
   }
 
-  def getAll: Future[List[Any]] = {
+  def getAll:   Future[List[Users]] = {
     Try(userDB.getAll) match {
       case Success(resultSet) => resultSet
       case Failure(_) => throw new SQLException

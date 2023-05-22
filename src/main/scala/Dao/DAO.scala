@@ -8,9 +8,9 @@ trait DAO {
 
   def addUser(user: Users): Future[String]
 
-  def getById(userId: Int): Future[List[Any]]
+  def getById(userId: Int):   Future[List[Users]]
 
-  def getAll: Future[List[Any]]
+  def getAll:  Future[List[Users]]
 
   def updateById(userId: Int, valueToUpdate: String): Future[String]
 

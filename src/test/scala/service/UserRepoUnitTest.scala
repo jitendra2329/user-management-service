@@ -35,8 +35,8 @@ class UserRepoUnitTest extends AnyFunSuite with MockitoSugar {
 
   test("Get user by ID should return an user's detail in list") {
     val userId = 45
-    val user: List[Any] = List("Bhavya", 30, "Delhi", "1997-04-04", Admin, userId)
-    when(userDB.getById(userId)).thenReturn(Future(List(user)))
+    val user = List(Users("Bhavya", 30, "Delhi", "1997-04-04", Admin, userId))
+    when(userDB.getById(userId)).thenReturn(Future(user))
     userRepo.getById(userId).onComplete {
       case Success(value) => assert(value.contains(user))
       case Failure(_) => false
@@ -47,8 +47,8 @@ class UserRepoUnitTest extends AnyFunSuite with MockitoSugar {
     val adminId = 45
     val customerId = 46
     val users = List(
-      List("Jeet", 23, "Gorakhpur", "1998-10-12", Customer, customerId),
-      List("Bhavya", 30, "Delhi", "1997-04-04", Admin, adminId)
+      Users("Jeet", 23, "Gorakhpur", "1998-10-12", Customer, customerId),
+      Users("Bhavya", 30, "Delhi", "1997-04-04", Admin, adminId)
     )
     when(userDB.getAll).thenReturn(Future(users))
     userRepo.getAll.onComplete {

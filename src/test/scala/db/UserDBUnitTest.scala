@@ -4,7 +4,6 @@ import models.UserType.{Admin, Customer}
 import models.Users
 import org.scalatest.flatspec.AnyFlatSpec
 
-import java.sql.Date
 import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -20,9 +19,9 @@ class UserDBUnitTest extends AnyFlatSpec {
     }
   }
 
-  it should "Get user by ID should return an Option[Users]" in {
+  it should "Get user by ID should return an List[Users]" in {
     val userId = 77
-    val expectedResult = List(77, "Ram", 23, "Kolkata", Date.valueOf("1998-01-01"), "Customer")
+    val expectedResult = List(Users("Ram", 23, "Kolkata","1998-01-01", Customer,77))
     userDB.getById(userId).andThen {
       case Success(value) => assert(value == List(expectedResult))
       case Failure(_) => false
@@ -31,11 +30,11 @@ class UserDBUnitTest extends AnyFlatSpec {
 
   it should "Get all users should return a List[List[Users]]" in {
     val users = List(
-      List(45, "Bhavya Verma", 30, "Delhi", Date.valueOf("1997-04-04"), "Admin"),
-      List(48, "Jitendra", 23, "Noida", Date.valueOf("1998-10-12"), "Customer"),
-      List(74, "Pawan", 19, "Kanpur", Date.valueOf("2005-03-02"), "Customer"),
-      List(75, "Akhil", 24, "Bihar", Date.valueOf("1999-02-03"), "Customer"),
-      List(77, "Ram Kumar", 23, "Kolkata", Date.valueOf("1998-01-01"), "Customer")
+      Users("Bhavya Verma", 30, "Delhi", "1997-04-04", Admin, 45),
+      Users("Jitendra", 23, "Noida","1998-10-12",Customer, 48),
+      Users( "Pawan", 19, "Kanpur", "2005-03-02", Customer, 74),
+      Users("Akhil", 24, "Bihar", "1999-02-03", Customer, 75),
+      Users( "Ram Kumar", 23, "Kolkata", "1998-01-01", Customer, 77)
     )
     userDB.getAll.andThen {
       case Success(value) => assert(value == users)

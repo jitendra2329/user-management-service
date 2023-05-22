@@ -34,20 +34,20 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
 
   it should "return a user in list" in {
     val userId = 74
-    val expectedResult = List(userId, "Pawan", 19, "Kanpur", Date.valueOf("2005-03-02"), "Customer")
+    val expectedResult = List(Users("Pawan", 19, "Kanpur", "2005-03-02", Customer, userId))
     val actualResult = userRepo.getById(userId)
     actualResult.onComplete {
-      case Success(value) => assert(value == List(expectedResult))
+      case Success(value) => assert(value == expectedResult)
       case Failure(_) => false
     }
   }
 
   it should "return details of all users in List" in {
     val expectedResult = List(
-      List(45, "Bhavya Verma", 30, "Delhi", Date.valueOf("1997-04-04"), "Admin"),
-      List(48, "Jitendra", 23, "Noida", Date.valueOf("1998-10-12"), "Customer"),
-      List(74, "Pawan", 19, "Kanpur", Date.valueOf("2005-03-02"), "Customer"),
-      List(75, "Akhil", 24, "Bihar", Date.valueOf("1999-02-03"), "Customer")
+      List(Users("Bhavya Verma", 30, "Delhi", "1997-04-04", Admin, 45)),
+      List(Users("Jitendra", 23, "Noida", "1998-10-12", Customer, 48)),
+      List(Users("Pawan", 19, "Kanpur", "2005-03-02", Customer, 74)),
+      List(Users("Akhil", 24, "Bihar", "1999-02-03", Customer, 75))
     )
 
     val actualResult = userRepo.getAll
