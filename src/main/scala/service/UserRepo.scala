@@ -15,18 +15,19 @@ class UserRepo(userDB: DAO) {
     "Data inserted successfully!"
   }
 
-  def getById(userId: Int):   Future[List[Users]] = {
-    Try(userDB.getById(userId)) match {
-      case Success(resultSet) => resultSet
+  def getById(userId: Int): Future[List[Users]] = {
+    getResult(Try(userDB.getById(userId)))
+  }
+
+  private def getResult(result: Try[Future[List[Users]]]): Future[List[Users]] = {
+    result match {
+      case Success(result) => result
       case Failure(_) => throw new SQLException
     }
   }
 
-  def getAll:   Future[List[Users]] = {
-    Try(userDB.getAll) match {
-      case Success(resultSet) => resultSet
-      case Failure(_) => throw new SQLException
-    }
+  def getAll: Future[List[Users]] = {
+    getResult(Try(userDB.getAll))
   }
 
   def updateById(userId: Int, valueToUpdate: String): Future[String] = Future {
@@ -39,7 +40,7 @@ class UserRepo(userDB: DAO) {
     "User Deleted!"
   }
 
-  def deleteAll(): Future[String] = Future{
+  def deleteAll(): Future[String] = Future {
     userDB.deleteAll()
     "All users deleted!"
   }

@@ -5,7 +5,6 @@ import models.UserType.{Admin, Customer}
 import models.Users
 import org.scalatest.flatspec.AnyFlatSpec
 
-import java.sql.Date
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
