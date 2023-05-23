@@ -8,7 +8,9 @@ import service.UserRepo
 import java.util.InputMismatchException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.StdIn
-import scala.util.{Failure, Success, Try}
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 
 object Main extends App {
 
