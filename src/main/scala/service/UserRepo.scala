@@ -15,8 +15,12 @@ class UserRepo(userDB: DAO) {
     "Data inserted successfully!"
   }
 
-  def getById(userId: Int): Future[List[Users]] = {
-    getResult(Try(userDB.getById(userId)))
+  def getById(userId: Int): Future[Option[Users]] = {
+//    getResult(Try(userDB.getById(userId)))
+    Try(userDB.getById(userId)) match {
+      case Success(user) => user
+      case Failure(_) => throw new RuntimeException
+    }
   }
 
   private def getResult(result: Try[Future[List[Users]]]): Future[List[Users]] = {

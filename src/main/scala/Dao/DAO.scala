@@ -8,7 +8,7 @@ trait DAO {
 
   def addUser(user: Users): Future[String]
 
-  def getById(userId: Int):   Future[List[Users]]
+  def getById(userId: Int):   Future[Option[Users]]
 
   def getAll:  Future[List[Users]]
 

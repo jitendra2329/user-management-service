@@ -72,12 +72,12 @@ object Main extends App {
     println("Enter Id: ")
     val id = StdIn.readInt()
     userRepo.getById(id).onComplete {
-      case Success(resultSet) => display(resultSet)
+      case Success(resultSet) => println(resultSet.getOrElse("Undefined user."))
       case Failure(exception) => println(exception.getMessage)
     }
   }
 
-  def display(resultSet: List[Any]): Unit = {
+  private def display(resultSet: List[Users]): Unit = {
     resultSet.foreach(println)
   }
 
@@ -112,7 +112,7 @@ object Main extends App {
 
   private def deleteAllUsers(): Unit = {
     userRepo.deleteAll().onComplete {
-      case Success(_) => println("Values Deleted!")
+      case Success(value) => println(value)
       case Failure(exception) => println(exception.getMessage)
     }
   }

@@ -21,10 +21,13 @@ class UserDB extends DAO {
     "Data inserted successfully!"
   }
 
-  def getById(userId: Int): Future[List[Users]] = Future {
+  def getById(userId: Int): Future[Option[Users]] = Future {
     Thread.sleep(150)
     val query = s"SELECT  * FROM userTable WHERE userId = $userId ;"
-    queryExecution(query)
+    queryExecution(query) match {
+      case List(value) => Some(value)
+      case _ => None
+    }
   }
 
   def getAll: Future[List[Users]] = Future {
@@ -65,19 +68,21 @@ class UserDB extends DAO {
     "Value updated successfully!"
   }
 
-  def deleteById(userID: Int): Future[String] = Future {
+  def deleteById(userID: Int): Future[String] = {
     val query = s"DELETE FROM userTable WHERE userId = $userID;"
-    Try(statement.executeQuery(query)) match {
-      case Success(_) => "User Deleted!"
-      case Failure(_) => throw new SQLException
-    }
+    queryExecutor(query)
   }
 
-  def deleteAll(): Future[String] = Future {
+  def deleteAll(): Future[String] = {
     val query = "TRUNCATE userTable;"
-    Try(statement.executeQuery(query)) match {
-      case Success(_) => "All users deleted!"
-      case Failure(_) => throw new SQLException
+    queryExecutor(query)
+  }
+
+  private def queryExecutor(query: String): Future[String] = {
+    Try(statement.executeQuery(query))
+    getAll.map { value =>
+      if (value.isEmpty) "All users deleted!"
+      else "User Deleted!"
     }
   }
 }
