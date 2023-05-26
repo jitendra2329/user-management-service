@@ -92,10 +92,13 @@ object Main extends App {
   private def updateUserDetailById(): Unit = {
     println("Enter Id: ")
     val id = StdIn.readInt()
-    println("Enter name to update : ")
+    println("Enter field to update(userName, age, dateOfBirth, address, userType): ")
+    val field = StdIn.readLine()
+    println("Enter value to update: ")
     val name = StdIn.readLine()
 
-    userRepo.updateById(id, name).onComplete {
+
+    userRepo.updateById(id, name,field).onComplete {
       case Success(value) => println(value)
       case Failure(exception) => println(exception.getMessage)
     }

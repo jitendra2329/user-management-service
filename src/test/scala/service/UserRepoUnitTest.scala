@@ -60,8 +60,8 @@ class UserRepoUnitTest extends AnyFunSuite with MockitoSugar {
   test("Update user by ID should return 'Value updated successfully!'") {
     val userId = 45
     val valueToUpdate = "Bhavya Verma"
-    when(userDB.updateById(userId, valueToUpdate)).thenReturn(Future("Value updated successfully!"))
-    userRepo.updateById(userId, valueToUpdate).onComplete {
+    when(userDB.updateById(userId, valueToUpdate,"userName")).thenReturn(Future("Value updated successfully!"))
+    userRepo.updateById(userId, valueToUpdate, "userName").onComplete {
       case Success(value) => assert(value == "Value updated successfully!")
       case Failure(_) => false
     }

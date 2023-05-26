@@ -62,8 +62,8 @@ class UserDB extends DAO {
     } else listBuffer.toList
   }
 
-  def updateById(userId: Int, valueToUpdate: String): Future[String] = Future {
-    val query = s"UPDATE userTable SET userName = '$valueToUpdate' WHERE userId = $userId;"
+  def updateById(userId: Int, valueToUpdate: String, fieldToUpdate: String): Future[String] = Future {
+    val query = s"UPDATE userTable SET $fieldToUpdate = '$valueToUpdate' WHERE userId = $userId;"
     statement.executeQuery(query)
     "Value updated successfully!"
   }
