@@ -33,11 +33,20 @@ The Users model represents a user in the system. It consists of the following fi
 #### Prerequisites
     Scala (version 2.13.6 or higher)
     sbt (version 1.5.5 or higher)
+    database (postgreSQL) 
 
 To run the project, follow these steps:
 
 #### Clone the repository:
     git clone https://github.com/jitendra2329/user-management-service.git
+### Configure the PostgreSQL on your local system.
+    Step 1 — Installing PostgreSQL
+        sudo apt update
+        sudo apt install postgresql postgresql-contrib
+        sudo systemctl start postgresql.service
+    Step 2 — Using PostgreSQL Roles and Databases
+        sudo -i -u postgres
+        psql
 #### Navigate to the project directory:
     cd user-management-service
 #### Running:
