@@ -2,33 +2,50 @@ package service
 
 import Dao.DAO
 import models.Users
-import java.util.UUID
+
+import java.sql.SQLException
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.collection.mutable.ListBuffer
+import scala.util.{Failure, Success, Try}
 
 class UserRepo(userDB: DAO) {
 
-  def addUser(user: Users): Future[String] = {
+  def addUser(user: Users): Future[String] = Future {
     userDB.addUser(user)
+    "Data inserted successfully!"
   }
 
-  def getById(userId: UUID): Future[Option[Users]] = {
-    userDB.getById(userId)
+  def getById(userId: Int): Future[Option[Users]] = {
+//    getResult(Try(userDB.getById(userId)))
+    Try(userDB.getById(userId)) match {
+      case Success(user) => user
+      case Failure(_) => throw new RuntimeException
+    }
   }
 
-  def getAll: Future[ListBuffer[Users]] = {
-    userDB.getAll
+  private def getResult(result: Try[Future[List[Users]]]): Future[List[Users]] = {
+    result match {
+      case Success(result) => result
+      case Failure(_) => throw new SQLException
+    }
   }
 
-  def updateById(userId: UUID, valueToUpdate: String): Future[ListBuffer[Users]] = {
+  def getAll: Future[List[Users]] = {
+    getResult(Try(userDB.getAll))
+  }
+
+  def updateById(userId: Int, valueToUpdate: String): Future[String] = Future {
     userDB.updateById(userId, valueToUpdate)
+    "Value updated successfully!"
   }
 
-  def deleteById(userID: UUID): Future[ListBuffer[Users]] = {
+  def deleteById(userID: Int): Future[String] = Future {
     userDB.deleteById(userID)
+    "User Deleted!"
   }
 
-  def deleteAll(): Future[String] = {
+  def deleteAll(): Future[String] = Future {
     userDB.deleteAll()
+    "All users deleted!"
   }
 }
