@@ -45,7 +45,7 @@ class UserDBUnitTest extends AnyFlatSpec {
   it should "Update user by ID should return a 'Value updated successfully!'" in {
     val userID = 77
     val newName = "Ram Kumar"
-    userDB.updateById(userID, newName).andThen {
+    userDB.updateById(userID, newName, "userName").andThen {
       case Success(value) => assert(value == "Value updated successfully!")
       case Failure(_) => false
     }

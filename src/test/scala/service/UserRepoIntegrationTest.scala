@@ -60,7 +60,7 @@ class UserRepoIntegrationTest extends AnyFlatSpec {
 
   it should "return an updated 'Value updated successfully!'" in {
     val userId = 45
-    val actualResult = userRepo.updateById(userId, "Bhavya Verma")
+    val actualResult = userRepo.updateById(userId, "Bhavya Verma", "userName")
     actualResult match {
       case result => result.onComplete {
         case Success(value) => assert(value == "Value updated successfully!")

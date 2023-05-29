@@ -12,7 +12,7 @@ trait DAO {
 
   def getAll:  Future[List[Users]]
 
-  def updateById(userId: Int, valueToUpdate: String): Future[String]
+  def updateById(userId: Int, valueToUpdate: String, fieldToUpdate: String): Future[String]
 
   def deleteById(userID: Int): Future[String]
 

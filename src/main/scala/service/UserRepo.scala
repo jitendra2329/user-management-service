@@ -16,7 +16,7 @@ class UserRepo(userDB: DAO) {
   }
 
   def getById(userId: Int): Future[Option[Users]] = {
-//    getResult(Try(userDB.getById(userId)))
+    //    getResult(Try(userDB.getById(userId)))
     Try(userDB.getById(userId)) match {
       case Success(user) => user
       case Failure(_) => throw new RuntimeException
@@ -34,8 +34,8 @@ class UserRepo(userDB: DAO) {
     getResult(Try(userDB.getAll))
   }
 
-  def updateById(userId: Int, valueToUpdate: String): Future[String] = Future {
-    userDB.updateById(userId, valueToUpdate)
+  def updateById(userId: Int, valueToUpdate: String, fieldToUpdate: String): Future[String] = Future {
+    userDB.updateById(userId, valueToUpdate, fieldToUpdate)
     "Value updated successfully!"
   }
 
